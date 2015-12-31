@@ -148,13 +148,8 @@ int main1(int argc, char **argv) {
   }
   
   string normalizer = getsenv("normalizer", "center");
-  if (normalizer == "center") {
-    clstm.normalizer.reset(CenterNormalizer());
-    print("using center normalizer\n");
-  } else if (normalizer == "none") {
-    clstm.normalizer.reset(NoNormalizer());
-    print("not using normalizer\n");
-  }
+  clstm.normalizer.reset(make_Normalizer(normalizer));
+  print("using normalizer", normalizer);
   clstm.net->info("");
 
   double test_error = 9999.0;

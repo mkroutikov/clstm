@@ -62,6 +62,8 @@ int main1(int argc, char **argv) {
   if (load_name == "") THROW("must give load= parameter");
   CLSTMOCR clstm;
   clstm.load(load_name);
+  string normalizer = getsenv("normalizer", "center");
+  clstm.normalizer.reset(make_Normalizer(normalizer));
 
   bool conf = getienv("conf", 0);
   string output = getsenv("output", "text");
