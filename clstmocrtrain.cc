@@ -137,9 +137,24 @@ int main1(int argc, char **argv) {
   print("got", codec.size(), "classes");
 
   CLSTMOCR clstm;
-  clstm.target_height = int(getrenv("target_height", 48));
-  clstm.createBidi(codec, getienv("nhidden", 100));
-  clstm.setLearningRate(getdenv("rate", 1e-4), getdenv("momentum", 0.9));
+  string load = getsenv("load", "");
+  if (load != "") {
+    print("loading from", load);
+	clstm.load(load);
+  } else {
+	clstm.target_height = int(getrenv("target_height", 48));
+	clstm.createBidi(codec, getienv("nhidden", 100));
+	clstm.setLearningRate(getdenv("rate", 1e-4), getdenv("momentum", 0.9));
+  }
+  
+  string normalizer = getsenv("normalizer", "center");
+  if (normalizer == "center") {
+    clstm.normalizer.reset(CenterNormalizer());
+    print("using center normalizer\n");
+  } else if (normalizer == "none") {
+    clstm.normalizer.reset(NoNormalizer());
+    print("not using normalizer\n");
+  }
   clstm.net->info("");
 
   double test_error = 9999.0;
@@ -186,14 +201,14 @@ int main1(int argc, char **argv) {
     read_png(raw, fname.c_str(), true);
     for (int i = 0; i < raw.size(); i++) raw[i] = 1 - raw[i];
     wstring pred = clstm.train(raw, gt);
-    if (trial % display_every == 0) {
+    if (display_every > 0 && trial % display_every == 0) {
       py.evalf("clf");
       show(py, clstm.net->inputs, 411);
       show(py, clstm.net->outputs, 412);
       show(py, clstm.targets, 413);
       show(py, clstm.aligned, 414);
     }
-    if (trial % report_every == 0) {
+    if (report_every > 0 && trial % report_every == 0) {
       mdarray<float> temp;
       print(trial);
       print("TRU", gt);
