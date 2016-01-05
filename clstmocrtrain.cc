@@ -143,7 +143,13 @@ int main1(int argc, char **argv) {
 	clstm.load(load);
   } else {
 	clstm.target_height = int(getrenv("target_height", 48));
-	clstm.createBidi(codec, getienv("nhidden", 100));
+	int nhidden = getienv("nhidden", 100);
+	int nhidden2 = getienv("nhidden2", 0);
+	if (nhidden2 == 0) { // single LSTM layer (default)
+		clstm.createBidi(codec, nhidden);
+	} else {
+		clstm.createBidi2(codec, nhidden, nhidden2);
+	}
 	clstm.setLearningRate(getdenv("rate", 1e-4), getdenv("momentum", 0.9));
   }
   

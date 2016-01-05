@@ -138,6 +138,18 @@ struct CLSTMOCR {
     normalizer.reset(make_CenterNormalizer());
     normalizer->target_height = target_height;
   }
+  void createBidi2(const std::vector<int> codec, int nhidden, int nhidden2) {
+    nclasses = codec.size();
+    net = make_net("bidi2", {{"ninput", target_height},
+                            {"noutput", nclasses},
+                            {"nhidden", nhidden},
+                            {"nhidden2", nhidden2}});
+    net->initialize();
+    net->codec = codec;
+    net->makeEncoders();
+    normalizer.reset(make_CenterNormalizer());
+    normalizer->target_height = target_height;
+  }
   std::wstring train(mdarray<float> &raw, const std::wstring &target) {
     normalizer->measure(raw);
     normalizer->normalize(image, raw);
