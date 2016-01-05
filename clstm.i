@@ -163,6 +163,7 @@ struct ITrainable {
 struct INetwork;
 typedef std::shared_ptr<INetwork> Network;
 %template(vectornet) std::vector<std::shared_ptr<INetwork> >;
+%template(vectorint) std::vector<int>;
 
 struct INetwork : virtual ITrainable {
     virtual ~INetwork();
