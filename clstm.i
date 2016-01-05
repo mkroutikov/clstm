@@ -163,7 +163,6 @@ struct ITrainable {
 struct INetwork;
 typedef std::shared_ptr<INetwork> Network;
 %template(vectornet) std::vector<std::shared_ptr<INetwork> >;
-%template(vectorint) std::vector<int>;
 
 struct INetwork : virtual ITrainable {
     virtual ~INetwork();
@@ -202,6 +201,8 @@ void mktargets(Sequence &seq, Classes &targets, int ndim);
 
 std::shared_ptr<INetwork> make_layer(string);
 std::shared_ptr<INetwork> make_net_init(string,string);
+
+std::shared_ptr<INetwork> make_Normalizer(string);
 
 %rename(seq_forward) forward_algorithm;
 void forward_algorithm(Mat &lr,Mat &lmatch,double skip=-5.0);
