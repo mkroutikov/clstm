@@ -203,7 +203,8 @@ void mktargets(Sequence &seq, Classes &targets, int ndim);
 std::shared_ptr<INetwork> make_layer(string);
 std::shared_ptr<INetwork> make_net_init(string,string);
 
-std::shared_ptr<INormalizer> make_Normalizer(string);
+typedef std::shared_ptr<INormalizer> Normalizer;
+Normalizer make_Normalizer(const string& name);
 
 %rename(seq_forward) forward_algorithm;
 void forward_algorithm(Mat &lr,Mat &lmatch,double skip=-5.0);
