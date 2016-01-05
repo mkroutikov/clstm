@@ -204,6 +204,18 @@ std::shared_ptr<INetwork> make_layer(string);
 std::shared_ptr<INetwork> make_net_init(string,string);
 
 typedef std::shared_ptr<INormalizer> Normalizer;
+
+struct INormalizer {
+  virtual ~INormalizer();
+  int target_height;
+  float smooth2d;
+  float smooth1d;
+  float range;
+  float vscale;
+  virtual void measure(mdarray<float> &line);
+  virtual void normalize(mdarray<float> &out, mdarray<float> &in);
+};
+
 Normalizer make_Normalizer(const string& name);
 
 %rename(seq_forward) forward_algorithm;
